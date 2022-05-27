@@ -1,67 +1,31 @@
 #include <iostream>
 using namespace std;
 
+int MatrixChainOrder(int p[], int i, int j)
+{
+	if (i == j)
+		return 0;
+	int k;
+	int min = INT_MAX;
+	int count;
+
+	for (k = i; k < j; k++)
+	{
+		count = MatrixChainOrder(p, i, k) + MatrixChainOrder(p, k + 1, j) + p[i - 1] * p[k] * p[j];
+
+		if (count < min)
+			min = count;
+	}
+
+	return min;
+}
+
 int main()
 {
-    int n, m, a, b;
+	setlocale(0, "");
+	int arr[] = { 5,10,3,12,5 };//, 5, 50, 6};
+	int n = sizeof(arr) / sizeof(arr[0]);
 
-    //n-конвееры
-    // m-рабочие
-
-    cout<<"Введите количество конвееров:\n";
-    cin >> n;
-    cout<<"Введите рабочих:\n"; cin >>m;
-
-    if (n>m)
-    {
-        cout<<"Работы идут очень медленно,хочешь добавить рабочих?\n";
-        cin>>a;
-        switch (a) {
-            case 1:
-                cout<<"Введите количество новых рабочих\n";
-                cin>>b;
-                m+=b;
-                if (b=0){
-                    cout<<"Ты ничего не изменил";
-                }
-                else{
-                    cout<<"Стало больше рабочих:"<<m<<"\nТеперь работы ускорились";
-                }
-                break;
-            case 2:
-                cout<<"Ты ничего не изменил";
-                break;
-            default:
-                cout<<"Ничего";
-                break;
-        }
-    }
-
-    if (m>n){
-        cout<<"Добавить еще конвееров?\n";
-        cin>>a;
-
-        switch (a) {
-            case 1:
-                cout<<"Введите желаемое количество конвееров\n";
-                cin>>b;
-                n+=b;
-                if (b=0){
-                    cout<<"Ничего не изменялось";
-                }
-                else{
-                    cout<<"Добавилось больше конвееров:"<<n<<"\nработа пошла полным ходом";
-                }
-                break;
-            case 2:
-                cout<<"Ничего не изменялось";
-                break;
-            default:
-                cout<<"Ничего";
-                break;
-        }
-    }
-    else{
-        cout<<"Стабильность";
-    }
+	cout << "Максимальное количество скалярных умножений = "
+		<< MatrixChainOrder(arr, 1, n - 1);
 }
