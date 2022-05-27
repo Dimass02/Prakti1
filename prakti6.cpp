@@ -1,40 +1,51 @@
 #include <iostream>
 #include <fstream>
-#include <string>
-#include <cmath>
-
 using namespace std;
 
-int hashfunction(string x)
+int pos(const char* s, const char* p, int n)
 {
-    int size=x.length();
-    return hash<int>()(size);
+	int i, j; // Счетчики для циклов
+	int lenC, lenS; // Длины строк
+
+	//Находим размеры строки исходника и искомого
+	for (lenC = 0; p[lenC]; lenC++);
+	for (lenS = 0; s[lenS]; lenS++);
+
+	for (i = 0; i <= lenS - lenC; i++) // Пока есть возможность поиска
+	{
+		for (j = 0; s[i + j] == p[j]; j++); // Проверяем совпадение посимвольно
+		// Если посимвольно совпадает по длине искомого
+		// Вернем из функции номер ячейки, откуда начинается совпадение
+		// Учитывать 0-терминатор  ( '\0' )
+		if (j - lenC == 1 && i == lenS - lenC && !(n - 1)) return i;
+		if (j == lenC)
+			if (n - 1) n--;
+			else return i;
+	}
+	//Иначе вернем -1 как результат отсутствия подстроки
+	return -1;
 }
 
 int main()
 {
-    setlocale(LC_ALL, "ru");
-    ifstream file("text.txt");
-    int arr[100];
-    int i=0;
-    
-    while(i<=(sizeof arr / sizeof arr[0])) {
-        string str;
-        getline(file, str);
-        arr[i]=hashfunction(str);
-        i++;
-    }
-    cout<<"Введи текст, который хочешь найти: ";
-    string key;
-    getline(cin, key);
-    
-    int keyhash=hashfunction(key)+1;
-    i=0;
-    while(i<=(sizeof arr / sizeof arr[0]))
-    {
-        if (keyhash==arr[i]){cout<<"Номер строки: "<<i+1;break;}
-        i++;
-    }
-    
-    return 0;
+	setlocale(LC_ALL, "rus"); // корректное отображение Кириллицы
+	string a;
+	char buff[5000]; // буфер промежуточного хранения считываемого из файла текста
+	ifstream fin("d:\\text.txt"); // открыли файл для чтения
+	while (!fin.eof())//Цикл для считывания файла
+	{
+		fin.getline(buff, sizeof(buff));
+		cout << buff << endl;
+	}
+	cin >> a;//Вводим строку
+	const char* s = buff;//Должен быть текст
+	const char* p = a.c_str();//Вводилось с клавы
+	int i, n = 0;
+	for (i = 1; n != -1; i++)//Вывод позиций строки
+	{
+		n = pos(s, p, i);
+
+		if (n >= 0)
+			cout << n << endl;
+	}
 }
