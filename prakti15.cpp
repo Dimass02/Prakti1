@@ -23,7 +23,7 @@ int MatrixChainOrder(int p[], int i, int j)
 int main()
 {
 	setlocale(0, "");
-	int arr[] = { 5,10,3,12,5 };//, 5, 50, 6};
+	int arr[] = { 5,10,3,12,5,50,6 };
 	int n = sizeof(arr) / sizeof(arr[0]);
 
 	cout << "Максимальное количество скалярных умножений = "
